@@ -6,9 +6,9 @@ export class CreateTransactionDto {
     @ApiProperty({ example: "NameA", description: "name" })
     @IsNotEmpty()
     name: string;
-    @ApiProperty({ example: "NameB", description: "borrow from" })
+    @ApiProperty({ example: "NameB", description: "creditor" })
     @IsNotEmpty()
-    from: string;
+    creditor: string;
     @ApiProperty({ example: 0.50 })
     @IsNumber()
     @IsNotEmpty()

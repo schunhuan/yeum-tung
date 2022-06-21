@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ReportService } from './report.service';
 
@@ -10,6 +10,16 @@ export class ReportController {
   @Get('/unPaid/:name')
   unPaid(@Param('name') name: string) {
     return this.reportService.unPaid(name);
+  }
+
+  @Get('/transaction/:name')
+  transactionByName(@Param('name') name: string) {
+    return this.reportService.transaction(name);
+  }
+
+  @Get('/transaction/')
+  transaction() {
+    return this.reportService.transaction();
   }
 
 }

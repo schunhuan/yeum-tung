@@ -11,7 +11,7 @@ export class Transaction {
     @Column({ type: 'string' })
     name: string;
     @Column({ type: 'string' })
-    from: string;
+    creditor: string;
     @Column({ type: 'float' })
     amount: number;
     @Column({ type: 'bool' })

@@ -16,11 +16,11 @@ export class ReportService {
   async unPaid(name: string): Promise<ReportUnpaidResponse> {
     let result = new ReportUnpaidResponse()
     let unpaidlist: Unpaid[] = await this.transactionRepository.createQueryBuilder().select(`
-    "from" as creditor,
+    creditor,
     sum(amount) as amount`)
       .where(`name = '${name}'`)
       .andWhere(`"isRepay" = false`)
-      .addGroupBy(`"from"`)
+      .addGroupBy(`"creditor"`)
       .getRawMany()
     if (!unpaidlist || unpaidlist.length === 0) throw new NotFoundException()
     result.result = {
@@ -30,5 +30,12 @@ export class ReportService {
     result.message = `Success`
     result.status = 0
     return plainToClass(ReportUnpaidResponse, result)
+  }
+
+  async transaction(name?: string) {
+    let qbTransaction = await this.transactionRepository.createQueryBuilder()
+      .select(`*`)
+    if (name) qbTransaction = qbTransaction.where(`name = '${name}'`)
+    return qbTransaction.getRawMany()
   }
 }
