@@ -17,7 +17,7 @@ export class ReportController {
     return this.reportService.transaction(name);
   }
 
-  @Get('/transaction/')
+  @Get('/transaction')
   transaction() {
     return this.reportService.transaction();
   }

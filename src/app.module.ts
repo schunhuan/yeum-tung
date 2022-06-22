@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TransactionModule } from './transaction/transaction.module';
@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ReportModule } from './report/report.module';
 import ormConfig from './config/orm.config';
+import { LogRequestMiddleware } from './request-log/log-request.middleware';
+import { LogRequest } from './request-log/entities/request-log.entity';
 
 @Module({
   imports: [
@@ -16,6 +18,7 @@ import ormConfig from './config/orm.config';
     TypeOrmModule.forRootAsync({
       useFactory: ormConfig,
     }),
+    TypeOrmModule.forFeature([LogRequest]),
     TransactionModule,
     ReportModule
   ],
@@ -23,4 +26,10 @@ import ormConfig from './config/orm.config';
   providers: [AppService],
 })
 
-export class AppModule { }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LogRequestMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

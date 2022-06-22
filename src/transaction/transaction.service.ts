@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import * as dayjs from 'dayjs';
@@ -22,13 +22,31 @@ export class TransactionService {
     return plainToClass(Transaction, createResult);
   }
 
+  async update(id, updateTransactionDto: UpdateTransactionDto) {
+    let transaction = await this.transactionRepository.findOneBy({ id: id });
+    if (!transaction) {
+      throw new NotFoundException();
+    }
+    return this.transactionRepository.save({
+      ...transaction,
+      ...updateTransactionDto
+    });
+  }
+
+  async delete(id) {
+    let transaction = await this.transactionRepository.findOneBy({ id: id });
+    if (!transaction) {
+      throw new NotFoundException();
+    }
+    return await this.transactionRepository.delete(id)
+  }
+
   async repay(id: string): Promise<BaseResponse> {
     let transaction = await this.transactionRepository.findOneBy({ id: id })
     if (!transaction) return plainToClass(BaseResponse, { message: "Transaction not found", Status: 1 });
     transaction.isRepay = true
     await this.transactionRepository.save(transaction)
     return plainToClass(BaseResponse, { message: "success", Status: 0 })
-
   }
 
 }

@@ -17,6 +17,21 @@ export class TransactionController {
     return this.transactionService.create(createTransactionDto);
   }
 
+  @Patch(':id')
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateAllDepositDto: UpdateTransactionDto
+  ) {
+    return await this.transactionService.update(id, updateAllDepositDto)
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  async delete(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.transactionService.delete(id)
+  }
+
+
   @Get('/repay/:id')
   @HttpCode(200)
   repay(@Param('id', ParseUUIDPipe) id: string) {

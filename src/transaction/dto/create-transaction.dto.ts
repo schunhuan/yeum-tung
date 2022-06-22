@@ -17,6 +17,6 @@ export class CreateTransactionDto {
     @ApiProperty({ example: false })
     @IsBoolean()
     @IsNotEmpty()
-    isRepay: string;
+    isRepay: boolean;
 }
 

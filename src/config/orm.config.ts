@@ -1,5 +1,6 @@
 import { registerAs } from "@nestjs/config";
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
+import { LogRequest } from "src/request-log/entities/request-log.entity";
 import { Transaction } from "src/transaction/entities/transaction.entity";
 
 export default registerAs('orm.config', (): TypeOrmModuleOptions => ({
@@ -9,7 +10,7 @@ export default registerAs('orm.config', (): TypeOrmModuleOptions => ({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
-    entities: [Transaction],
+    entities: [Transaction, LogRequest],
     synchronize: (process.env.ORM_IS_SYNC === 'true'),
     ssl: (process.env.DB_SSL == "true" ? ({ rejectUnauthorized: false }) : false)
 }
