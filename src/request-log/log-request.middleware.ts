@@ -11,7 +11,7 @@ export class LogRequestMiddleware implements NestMiddleware {
         @InjectRepository(LogRequest)
         private readonly logRequestRepository: Repository<LogRequest>,
     ) { }
-    use(req: Request, next: NextFunction) {
+    use(req: Request, res: Response, next: NextFunction) {
         this.logRequestRepository.save({ body: req.body, path: req.originalUrl })
         next();
     }
